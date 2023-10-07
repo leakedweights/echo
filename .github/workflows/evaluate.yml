@@ -1,0 +1,26 @@
+name: Evaluation
+
+on:
+  pull_request:
+    types: [opened, synchronize, ready_for_review, labeled]
+
+jobs:
+  evaluate:
+    runs-on: ubuntu-latest
+
+    timeout-minutes: 1
+
+    if: github.event.pull_request.draft == false
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 1
+
+      - name: Collect screenshots
+        uses: docker://ghcr.io/akosdudas/ahk-publish-results-pr:v1
+        with:
+          GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+          AHK_IMAGEEXT: ".png"
+          AHK_RESULTFILE: ""
