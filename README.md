@@ -14,11 +14,11 @@ Információk [itt](https://viauac00.github.io/laborok/hf)
 
 ### Laborvezető: Strbik Anna Viktória
 
-![Cover](assets/Cover.png)
-
 ## Bemutatás
 
 Az Echo egy korszerű Android alkalmazás, amely lehetővé teszi a felhasználók számára, hogy hangfelvételt készítsenek, amelyet az alkalmazás szöveges formátumban tárol és vektorizált formátumban egy külső vektoradatbázisba menti. Az ötlet abból származik, hogy sokan szeretnének gyorsan és hatékonyan rögzíteni és keresni információkat anélkül, hogy manuálisan jegyzetelniük kellene. Az alkalmazás kiváló eszköz lehet diákoknak, újságíróknak és üzletembereknek, akik gyakran vesznek részt előadásokon és megbeszéléseken.
+
+![Cover](assets/Cover.png)
 
 ## Főbb funkciók
 
