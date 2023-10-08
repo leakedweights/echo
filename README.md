@@ -3,28 +3,43 @@
 Információk [itt](https://viauac00.github.io/laborok/hf)
 
 ## Mobil- és webes szoftverek
-### [Dátum]
-### [Alkalmazás neve]
-### [Teljes név] - ([Neptun kód])
-### [e-mail cím] 
-### Laborvezető: [Laborvezető neve]
+
+### 10/10/2023
+
+### Echo
+
+### Váradi Kristóf - (BP17IB)
+
+### kristofvaradi@edu.bme.hu
+
+### Laborvezető: Strbik Anna Viktória
+
+![Cover](assets/Cover.png)
 
 ## Bemutatás
 
-Az alkalmazás rövid, 2-3 mondatos bemutatása. Honnan az ötlet, mi szülte az igényt, ki lehetne a célközönség.
-A laboron és előadáson bemutatott alkalmazásokat nem lehet házi feladatnak választani.
+Az Echo egy korszerű Android alkalmazás, amely lehetővé teszi a felhasználók számára, hogy hangfelvételt készítsenek, amelyet az alkalmazás szöveges formátumban tárol és vektorizált formátumban egy külső vektoradatbázisba menti. Az ötlet abból származik, hogy sokan szeretnének gyorsan és hatékonyan rögzíteni és keresni információkat anélkül, hogy manuálisan jegyzetelniük kellene. Az alkalmazás kiváló eszköz lehet diákoknak, újságíróknak és üzletembereknek, akik gyakran vesznek részt előadásokon és megbeszéléseken.
 
 ## Főbb funkciók
 
-Az alkalmazás minden funkciójára kiterjedő leírás (röviden, lényegre törően). Legyen egyértelműen eldönthető, hogy az adott funkció implementálva van-e!
-Pl.: Az alkalmazással lehetőség van tételek felvételére és tárolására, valamint azok rendezett megjelenítésére, illetve frissítésre X hálózati hívás segítségével.
+- **Felhasználói hitelesítés:** Az alkalmazás lehetővé teszi a felhasználók számára, hogy Google OAuth segítségével lépjenek be, biztosítva ezzel az adataik biztonságát.
+
+- **Hangfelvétel:** A felhasználók rögzíthetnek hangfelvételeket közvetlenül az alkalmazás felületéről, ami intuitív és könnyen használható.
+
+- **Audio Transzkribálás:** Az alkalmazás automatikusan transzkribálja a felvett hanganyagot szöveggé, lehetővé téve a gyors és pontos jegyzetelést.
+
+- **Tudásbázis:** A transzkribált szövegek tárolása és indexelése egy vektor adatbázisban történik, ami gyors és hatékony lekérdezéseket tesz lehetővé.
+
+- **Chat felület:** A felhasználók szöveges üzenetek segítségével kérdezhetik le a tudásbázist, és azonnal válaszokat kapnak a korábban tárolt információkra.
 
 ## Választott technológiák:
 
-- (UI)
-- (fragmentek)
-- (RecyclerView)
-- (Perzisztens adattárolás)
+- TODO
 
+- TODO
+
+- TODO
+
+- A szöveges transzkripciók és egyéb felhasználói adatok tárolása lokális adatbázisban, a hangfételekből képzett szemantikus adatok tárolása pedig egy külső vektoradatbázisban történik, amely gyors és megbízható adatelérést biztosít.
 
 # Házi feladat dokumentáció (ha nincs, ez a fejezet törölhető)
