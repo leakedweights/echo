@@ -34,12 +34,12 @@ Az Echo egy korszerű Android alkalmazás, amely lehetővé teszi a felhasznál�
 
 ## Választott technológiák:
 
-- TODO
+- RecyclerView
 
-- TODO
+- Hálózati kommunikáció harmadik féltől származó REST API-kkal
 
-- TODO
+- A felhasználói élmény növelése érdekében az applikáció **animációkat** használ
 
-- A szöveges transzkripciók és egyéb felhasználói adatok tárolása lokális adatbázisban, a hangfételekből képzett szemantikus adatok tárolása pedig egy külső vektoradatbázisban történik, amely gyors és megbízható adatelérést biztosít.
+- A szöveges transzkripciók és egyéb felhasználói adatok **perzisztens tárolása** lokális adatbázisban, a hangfételekből képzett szemantikus adatok tárolása pedig egy külső vektoradatbázisban történik, amely gyors és megbízható adatelérést biztosít.
 
 # Házi feladat dokumentáció (ha nincs, ez a fejezet törölhető)
