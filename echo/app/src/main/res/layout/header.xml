@@ -9,7 +9,7 @@
         android:id="@+id/iv_title"
         android:layout_height="36dp"
         android:layout_width="wrap_content"
-        android:src="@drawable/logo"
+        android:src="@drawable/ic_logo"
         android:scaleType="fitStart"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
@@ -19,7 +19,7 @@
         android:layout_width="wrap_content"
         android:layout_height="36dp"
         android:scaleType="fitEnd"
-        android:src="@drawable/logout"
+        android:src="@drawable/ic_logout"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:paddingBottom="4dp"/>

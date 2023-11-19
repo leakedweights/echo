@@ -1,6 +1,5 @@
 package hu.bme.aut.echo.http
 
-import android.util.Log
 import com.google.firebase.auth.FirebaseUser
 import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException

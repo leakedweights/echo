@@ -58,31 +58,12 @@ class MainActivity : AppCompatActivity() {
         checkOrMakePermissionRequest()
     }
 
-    private fun playAnimations() {
-        binding.header.ivTitle.startAnimationFromBottom(delay = 300)
-        binding.tvSubtitle.startAnimationFromBottom(delay = 500)
-        binding.tvDescription.startAnimationFromBottom(delay = 700)
-        binding.btnLogin.startAnimationFromBottom(delay = 900, duration = 800)
-    }
-
-
     override fun onStart() {
         super.onStart()
         val user = auth.currentUser
         if (user != null) {
             onAuthenticated(user)
         }
-    }
-
-    private fun signIn() {
-        val signInIntent = googleSignInClient.signInIntent
-        startActivityForResult(signInIntent, RC_SIGN_IN)
-    }
-
-    private fun onAuthenticated(user: FirebaseUser) {
-        Log.d(TAG, "Successful sign-in from user ${user.email}")
-        val intent = Intent(this, HomeActivity::class.java)
-        startActivity(intent)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -98,6 +79,40 @@ class MainActivity : AppCompatActivity() {
                 Log.w(TAG, "Google sign in failed", e)
             }
         }
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int,
+                                            permissions: Array<out String>,
+                                            grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == REQUEST_INTERNET) {
+            if (!(grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
+                Toast
+                    .makeText(
+                        this@MainActivity, "You must allow network access to use Echo.",
+                        Toast.LENGTH_SHORT
+                    )
+                    .show()
+            }
+        }
+    }
+
+    private fun playAnimations() {
+        binding.header.ivTitle.startAnimationFromBottom(delay = 300)
+        binding.tvSubtitle.startAnimationFromBottom(delay = 500)
+        binding.tvDescription.startAnimationFromBottom(delay = 700)
+        binding.btnLogin.startAnimationFromBottom(delay = 900, duration = 800)
+    }
+
+    private fun signIn() {
+        val signInIntent = googleSignInClient.signInIntent
+        startActivityForResult(signInIntent, RC_SIGN_IN)
+    }
+
+    private fun onAuthenticated(user: FirebaseUser) {
+        Log.d(TAG, "Successful sign-in from user ${user.email}")
+        val intent = Intent(this, HomeActivity::class.java)
+        startActivity(intent)
     }
 
     private fun firebaseAuthWithGoogle(idToken: String) {
@@ -124,22 +139,6 @@ class MainActivity : AppCompatActivity() {
                 arrayOf(Manifest.permission.INTERNET),
                 REQUEST_INTERNET
             )
-        }
-    }
-
-    override fun onRequestPermissionsResult(requestCode: Int,
-                                            permissions: Array<out String>,
-                                            grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == REQUEST_INTERNET) {
-            if (!(grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
-                Toast
-                    .makeText(
-                        this@MainActivity, "You must allow network access to use Echo.",
-                        Toast.LENGTH_SHORT
-                    )
-                    .show()
-            }
         }
     }
 }

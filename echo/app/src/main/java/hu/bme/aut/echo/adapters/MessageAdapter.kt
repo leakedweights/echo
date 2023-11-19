@@ -22,12 +22,12 @@ class MessageAdapter(private val messages: List<Message>) : RecyclerView.Adapter
         val message: Message = messages[position]
         if(message.sender == Message.Sender.User) {
             val userTextColor = ContextCompat.getColor(holder.itemView.context, R.color.text_user)
-            holder.binding.messageItem.setBackgroundResource(R.drawable.user_message_background)
+            holder.binding.messageItem.setBackgroundResource(R.drawable.user_message_bg)
             holder.binding.tvSender.setTextColor(userTextColor)
             holder.binding.tvCardContent.setTextColor(userTextColor)
         }
         if(!message.successful) {
-            holder.binding.messageItem.setBackgroundResource(R.drawable.failure_background)
+            holder.binding.messageItem.setBackgroundResource(R.drawable.message_error_bg)
         }
         holder.binding.tvSender.text = message.sender.toString().replaceFirstChar(Char::titlecase)
         holder.binding.tvCardContent.text = message.content

@@ -10,13 +10,12 @@ import android.speech.RecognizerIntent
 import android.util.Log
 import android.widget.Button
 import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
@@ -38,22 +37,7 @@ class HomeActivity : AppCompatActivity() {
     private lateinit var user: FirebaseUser
     private lateinit var googleSignInClient: GoogleSignInClient
 
-    private var speechResultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-        if (result.resultCode == Activity.RESULT_OK) {
-            val results = result.data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
-            val recognizedText = results?.get(0) ?: ""
-            saveTranscription(recognizedText)
-            Log.d("MainActivity", recognizedText)
-        } else {
-            Log.d("MainActivity", "Google Speech recognizer could not pick up speech, inserting mock context.")
-            val mockText = """
-                In a world kissed by the gentle touch of nature, a perfect day unfolded. It began with a sunrise hike through a forest where the light danced through leaves, casting a tapestry of shadows and sunbeams. At the summit, a breathtaking view of rolling hills on one side and an endless ocean on the other greeted the hikers. This was followed by a delightful breakfast at a quaint café, where the aroma of freshly brewed coffee and sweet pastries filled the air, accompanied by laughter and stories shared among friends.
-                The afternoon and evening were a seamless blend of joy and relaxation. A beach visit offered warm sands, playful waves, and the simple pleasure of building sandcastles and swimming in the turquoise sea. As the day mellowed into a golden evening, a leisurely bike ride through picturesque streets led to a cozy backyard barbecue. Surrounded by family and friends, with a backdrop of starry skies and the soft strumming of music, the day drew to a close. It was a day so full of warmth, camaraderie, and serene beauty that it remained etched in memory as the epitome of perfection.
-            """.trimIndent()
-
-            saveTranscription(mockText)
-        }
-    }
+    private var speechResultLauncher = getSpeechToTextLauncher()
 
     companion object {
         const val REQUEST_MICROPHONE = 2
@@ -68,17 +52,35 @@ class HomeActivity : AppCompatActivity() {
 
         googleSignInClient = getSigninClient(this, getString(R.string.googleid_client_id))
 
-        binding.header.ivLogout.setOnClickListener {
-            googleSignInClient.signOut()
-            auth.signOut()
-            val intent = Intent(this, MainActivity::class.java)
-            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-            startActivity(intent)
-            finish()
-        }
-
-        playAnimations()
+        setupLogoutButton()
         setupRecordButton()
+        playAnimations()
+    }
+
+    @SuppressLint("SetTextI18n")
+    override fun onStart() {
+        super.onStart()
+        user = auth.currentUser!!
+        binding.tvGreeting.text = "Hi, ${user.displayName?.split(" ")?.get(0) ?: "Anon"} 👋"
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int,
+                                            permissions: Array<out String>,
+                                            grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == REQUEST_MICROPHONE) {
+            if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
+                startRecording()
+            } else {
+                Toast.makeText(this, "Microphone permission is required to use this feature.", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        setRecentNote()
+        setWordCount()
     }
 
     private fun playAnimations() {
@@ -91,18 +93,22 @@ class HomeActivity : AppCompatActivity() {
         binding.btnRecord.startAnimationFromBottom(delay = 1300)
     }
 
-    @SuppressLint("SetTextI18n")
-    override fun onStart() {
-        super.onStart()
-        user = auth.currentUser!!
-        binding.tvGreeting.text = "Hi, ${user.displayName?.split(" ")?.get(0) ?: "Anon"} 👋"
+    private fun setupLogoutButton() {
+        binding.header.ivLogout.setOnClickListener {
+            googleSignInClient.signOut()
+            auth.signOut()
+            val intent = Intent(this, MainActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            startActivity(intent)
+            finish()
+        }
     }
 
 
     private fun setupRecordButton() {
         val btnRecord: Button = binding.btnRecord
 
-        val drawable = ContextCompat.getDrawable(this, R.drawable.recording)?.apply {
+        val drawable = ContextCompat.getDrawable(this, R.drawable.ic_recording)?.apply {
             setBounds(0, 0, 112, 112)
         }
         btnRecord.setCompoundDrawables(drawable, null, null, null)
@@ -135,9 +141,7 @@ class HomeActivity : AppCompatActivity() {
 
 
     private fun saveTranscription(text: String) {
-
         val client = Vectorize()
-
         client.postVectorizeRequest(user, text, object : Vectorize.PostVectorizeCallback {
             override fun onSuccess(searchId: String) {
 
@@ -174,21 +178,21 @@ class HomeActivity : AppCompatActivity() {
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-        setRecentNote()
-        setWordCount()
-    }
-
-    override fun onRequestPermissionsResult(requestCode: Int,
-                                            permissions: Array<out String>,
-                                            grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == REQUEST_MICROPHONE) {
-            if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
-                startRecording()
+    private fun getSpeechToTextLauncher(): ActivityResultLauncher<Intent> {
+        return registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                val results = result.data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
+                val recognizedText = results?.get(0) ?: ""
+                saveTranscription(recognizedText)
+                Log.d("MainActivity", recognizedText)
             } else {
-                Toast.makeText(this, "Microphone permission is required to use this feature.", Toast.LENGTH_SHORT).show()
+                Log.d("MainActivity", "Google Speech recognizer could not pick up speech, inserting mock context.")
+                val mockText = """
+                In a world kissed by the gentle touch of nature, a perfect day unfolded. It began with a sunrise hike through a forest where the light danced through leaves, casting a tapestry of shadows and sunbeams. At the summit, a breathtaking view of rolling hills on one side and an endless ocean on the other greeted the hikers. This was followed by a delightful breakfast at a quaint café, where the aroma of freshly brewed coffee and sweet pastries filled the air, accompanied by laughter and stories shared among friends.
+                The afternoon and evening were a seamless blend of joy and relaxation. A beach visit offered warm sands, playful waves, and the simple pleasure of building sandcastles and swimming in the turquoise sea. As the day mellowed into a golden evening, a leisurely bike ride through picturesque streets led to a cozy backyard barbecue. Surrounded by family and friends, with a backdrop of starry skies and the soft strumming of music, the day drew to a close. It was a day so full of warmth, camaraderie, and serene beauty that it remained etched in memory as the epitome of perfection.
+            """.trimIndent()
+
+                saveTranscription(mockText)
             }
         }
     }

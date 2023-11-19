@@ -1,6 +1,7 @@
 package hu.bme.aut.echo
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -8,6 +9,7 @@ import android.util.Log
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
@@ -16,6 +18,7 @@ import hu.bme.aut.echo.adapters.MessageAdapter
 import hu.bme.aut.echo.databinding.ActivityChatBinding
 import hu.bme.aut.echo.models.Message
 import hu.bme.aut.echo.http.Chat
+import hu.bme.aut.echo.utils.getSigninClient
 import hu.bme.aut.echo.utils.startAnimationFromBottom
 import java.io.IOException
 
@@ -23,10 +26,12 @@ class ChatActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityChatBinding
     private lateinit var messageAdapter: MessageAdapter
-    private lateinit var messages: MutableList<Message>
 
     private lateinit var auth: FirebaseAuth
     private lateinit var user: FirebaseUser
+    private lateinit var googleSignInClient: GoogleSignInClient
+
+    private var messages: MutableList<Message> = mutableListOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,25 +39,18 @@ class ChatActivity : AppCompatActivity() {
         auth = Firebase.auth
         setContentView(binding.root)
 
-        messages = mutableListOf()
+        googleSignInClient = getSigninClient(this, getString(R.string.googleid_client_id))
 
-        messageAdapter = MessageAdapter(messages)
-
-        binding.messagesRecyclerView.apply {
-            layoutManager = LinearLayoutManager(this@ChatActivity)
-            adapter = messageAdapter
-        }
-
-        binding.userInput.setOnFocusChangeListener { _, hasFocus ->
-            if (hasFocus) {
-                binding.userInput.setLines(4)
-            } else {
-                binding.userInput.setLines(1)
-            }
-        }
-
+        setupRecyclerView()
+        setupUserInput()
         setupSendButton()
+        setupLogoutButton()
         playAnimations()
+    }
+    override fun onStart() {
+        super.onStart()
+        messages.add(Message("Hi! How can I help you today?", Message.Sender.Echo),)
+        user = auth.currentUser!!
     }
 
     private fun playAnimations() {
@@ -61,11 +59,6 @@ class ChatActivity : AppCompatActivity() {
         binding.chatInput.startAnimationFromBottom(delay = 900)
     }
 
-    override fun onStart() {
-        super.onStart()
-        messages.add(Message("Hi! How can I help you today?", Message.Sender.Echo),)
-        user = auth.currentUser!!
-    }
 
     private fun setupSendButton() {
         binding.btnSend.setOnClickListener {
@@ -111,6 +104,17 @@ class ChatActivity : AppCompatActivity() {
         }
     }
 
+    private fun setupLogoutButton() {
+        binding.header.ivLogout.setOnClickListener {
+            googleSignInClient.signOut()
+            auth.signOut()
+            val intent = Intent(this, MainActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            startActivity(intent)
+            finish()
+        }
+    }
+
     private fun notifyMessageInsert() {
         Handler(Looper.getMainLooper()).postDelayed({
             binding.messagesRecyclerView.smoothScrollToPosition(messages.size - 1)
@@ -129,4 +133,22 @@ class ChatActivity : AppCompatActivity() {
         binding.chatInput.clearFocus()
     }
 
+    private fun setupRecyclerView() {
+        messageAdapter = MessageAdapter(messages)
+
+        binding.messagesRecyclerView.apply {
+            layoutManager = LinearLayoutManager(this@ChatActivity)
+            adapter = messageAdapter
+        }
+    }
+
+    private fun setupUserInput() {
+        binding.userInput.setOnFocusChangeListener { _, hasFocus ->
+            if (hasFocus) {
+                binding.userInput.setLines(4)
+            } else {
+                binding.userInput.setLines(1)
+            }
+        }
+    }
 }
