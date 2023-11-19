@@ -23,6 +23,7 @@ import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import hu.bme.aut.echo.databinding.ActivityMainBinding
+import hu.bme.aut.echo.utils.getSigninClient
 import hu.bme.aut.echo.utils.startAnimationFromBottom
 
 class MainActivity : AppCompatActivity() {
@@ -45,12 +46,7 @@ class MainActivity : AppCompatActivity() {
 
         auth = Firebase.auth
 
-        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            .requestIdToken(getString(R.string.googleid_client_id))
-            .requestEmail()
-            .build()
-
-        googleSignInClient = GoogleSignIn.getClient(this, gso)
+        googleSignInClient = getSigninClient(this, getString(R.string.googleid_client_id))
 
         binding.btnLogin.setOnClickListener {
             signIn()

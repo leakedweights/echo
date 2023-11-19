@@ -25,6 +25,7 @@ import hu.bme.aut.echo.databinding.ActivityHomeBinding
 import hu.bme.aut.echo.models.Transcription
 import hu.bme.aut.echo.db.TranscriptionsDatabase
 import hu.bme.aut.echo.http.Vectorize
+import hu.bme.aut.echo.utils.getSigninClient
 import hu.bme.aut.echo.utils.startAnimationFromBottom
 import java.io.IOException
 import java.util.Locale
@@ -36,6 +37,7 @@ class HomeActivity : AppCompatActivity() {
     private lateinit var db: TranscriptionsDatabase
     private lateinit var auth: FirebaseAuth
     private lateinit var user: FirebaseUser
+    private lateinit var googleSignInClient: GoogleSignInClient
 
     private var speechResultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == Activity.RESULT_OK) {
@@ -65,7 +67,10 @@ class HomeActivity : AppCompatActivity() {
         db = TranscriptionsDatabase.getDatabase(applicationContext)
         setContentView(binding.root)
 
+        googleSignInClient = getSigninClient(this, getString(R.string.googleid_client_id))
+
         binding.header.ivLogout.setOnClickListener {
+            googleSignInClient.signOut()
             auth.signOut()
             val intent = Intent(this, MainActivity::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK

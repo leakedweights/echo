@@ -31,7 +31,7 @@ class MessageAdapter(private val messages: List<Message>) : RecyclerView.Adapter
         }
         holder.binding.tvSender.text = message.sender.toString().replaceFirstChar(Char::titlecase)
         holder.binding.tvCardContent.text = message.content
-        holder.binding.messageItem.fadeIn(delay = 600)
+        holder.binding.messageItem.fadeIn(delay = 0)
     }
 
 
