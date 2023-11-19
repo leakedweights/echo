@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/messageItem"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/card_background"
+    app:layout_constraintHeight_max="250dp"
+    android:orientation="vertical"
+    android:padding="12dp"
+    android:layout_marginTop="16dp">
+
+    <TextView
+        android:id="@+id/tvSender"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:textSize="16sp"
+        android:textFontWeight="500"/>
+
+    <TextView
+        android:id="@+id/tvCardContent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:textFontWeight="500"
+        android:paddingVertical="8dp"/>
+</LinearLayout>

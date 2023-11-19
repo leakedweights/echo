@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="EchoTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowBackground">@color/background</item>
+        <item name="android:textColor">@color/text_primary</item>
+        <item name="fontFamily">@font/inter</item>
+        <item name="textAllCaps">false</item>
+    </style>
+
+    <color name="background">#EBEAE8</color>
+    <color name="background_accent">#FFFDF8</color>
+    <color name="background_user_message">#F5F3F0</color>
+    <color name="background_failure">#F0CC85</color>
+    <color name="text_user">#4A4949</color>
+    <color name="text_primary">#121212</color>
+    <color name="text_secondary">#8A8984</color>
+</resources>

@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">Echo</string>
+    <string name="googleid_client_id">3661899995-855d30fgg2n7mgcq3h7kbkik3jsg61fr.apps.googleusercontent.com</string>
+    <string name="hero_subtitle">Just hit record and let your ideas flow. We\'ll handle the rest.</string>
+    <string name="hero_title">Turn your wavs into knowledge bases</string>
+</resources>
