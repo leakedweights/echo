@@ -50,7 +50,7 @@ Az `Echo` nevű alkalmazás segítségével természetes nyelven rögzíthetünk
 
 ## Futtatási környezet, engedélyek
 
-Az applikáció Android alapú operációs rendszerekkel rendelkező mobileszközökön futtatható. A rendszer verziója legalább `26`-os, valamint az eszköznek rendelkeznie kell hangrögzítésre mikrofonnal.
+Az applikáció Android alapú operációs rendszerekkel rendelkező mobileszközökön futtatható. Az SDK verziója legalább `26`-os, valamint az eszköznek rendelkeznie kell hangrögzítésre mikrofonnal.
 
 Az applikáció felhasználójának rendelkeznie kell Google fiókkal, hiszen ez alapján azonosíthatóak a rögzített jegyzetek.
 

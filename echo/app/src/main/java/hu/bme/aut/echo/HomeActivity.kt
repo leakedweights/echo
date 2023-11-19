@@ -28,7 +28,6 @@ import hu.bme.aut.echo.http.Vectorize
 import hu.bme.aut.echo.utils.getSigninClient
 import hu.bme.aut.echo.utils.startAnimationFromBottom
 import java.io.IOException
-import java.util.Locale
 import kotlin.concurrent.thread
 
 class HomeActivity : AppCompatActivity() {
@@ -128,7 +127,7 @@ class HomeActivity : AppCompatActivity() {
         } else {
             val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).apply {
                 putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
-                putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.US)
+                putExtra(RecognizerIntent.EXTRA_LANGUAGE, "en-US")
             }
             speechResultLauncher.launch(intent)
         }

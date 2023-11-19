@@ -35,8 +35,8 @@ class Vectorize {
         val requestObj = VectorizationRequest(
             content = content,
             tenant = user.uid,
-            chunk_size = 4,
-            sentence_overlap = 2
+            chunk_size = 10,
+            sentence_overlap = 4
         )
 
         val gson = Gson()
