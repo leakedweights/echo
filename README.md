@@ -1,62 +1,44 @@
-# Házi feladat specifikáció
+# Echo: AI Audio Transcriptions and Queries
 
-Információk [itt](https://viauac00.github.io/laborok/hf)
+## Introduction
 
-## Mobil- és webes szoftverek
+Echo is an Android application for information capturing and retrieval. Users can record voice memos which are then stored in textual format and vectorized for storage in a vector database.
 
-### 10/10/2023
+![Echo Application Cover](assets/Cover.png)
 
-### Echo
+## Key Features
 
-## Bemutatás
+- **User Authentication** - Google OAuth
 
-Az Echo egy korszerű Android alkalmazás, amely lehetővé teszi a felhasználók számára, hogy hangfelvételt készítsenek, amelyet az alkalmazás szöveges formátumban tárol és vektorizált formátumban egy külső vektoradatbázisba menti. Az ötlet abból származik, hogy sokan szeretnének gyorsan és hatékonyan rögzíteni és keresni információkat anélkül, hogy manuálisan jegyzetelniük kellene. Az alkalmazás kiváló eszköz lehet diákoknak, újságíróknak és üzletembereknek, akik gyakran vesznek részt előadásokon és megbeszéléseken.
+- **Voice Recording**
 
-![Cover](assets/Cover.png)
+- **Audio Transcription**
+- 
+- **Knowledge Base**: Transcribed texts are stored and indexed in a vector database.
 
-## Főbb funkciók
+- **Query Interface**: Users can interact with the knowledge base through text queries.
 
-- **Felhasználói hitelesítés:** Az alkalmazás lehetővé teszi a felhasználók számára, hogy Google OAuth segítségével lépjenek be, biztosítva ezzel az adataik biztonságát.
+# Application Documentation
 
-- **Hangfelvétel:** A felhasználók rögzíthetnek hangfelvételeket közvetlenül az alkalmazás felületéről, ami intuitív és könnyen használható.
+## Overview
 
-- **Audio Transzkribálás:** Az alkalmazás automatikusan transzkribálja a felvett hanganyagot szöveggé, lehetővé téve a gyors és pontos jegyzetelést.
+The Echo application allows users to naturally record voice notes via mobile devices, subsequently engaging in dialogues about the content of these notes through a sophisticated language model (GPT-3.5-turbo).
 
-- **Tudásbázis:** A transzkribált szövegek tárolása és indexelése egy vektor adatbázisban történik, ami gyors és hatékony lekérdezéseket tesz lehetővé.
+## Execution Environment and Permissions
 
-- **Chat felület:** A felhasználók szöveges üzenetek segítségével kérdezhetik le a tudásbázist, és azonnal válaszokat kapnak a korábban tárolt információkra.
+Echo is compatible with Android-based operating systems on mobile devices, requiring a minimum SDK version of 26. Additionally, devices must be equipped with a microphone for audio recording.
 
-## Választott technológiák:
+Users must possess a Google account for identification purposes and to associate recorded notes.
 
-- RecyclerView
+The application necessitates permission for internet access (`android.permission.INTERNET`) and audio recording (`android.permission.RECORD_AUDIO`).
 
-- Hálózati kommunikáció REST API-kkal
+## Limitations
 
-- Animációk
+Running the application on an emulator may impede audio recording capabilities due to limitations of `android.speech` and emulator microphone configurations. Although the Speech to Text window is accessible, the absence of audio input prevents speech-to-text conversion.
 
-- Perzisztens adattárolás
+To test functionality on an emulator, substitute the `mockText` variable in `HomeActivity.kt` with the desired text content.
 
-# Házi feladat dokumentáció
-
-## Bevezetés
-
-Az `Echo` nevű alkalmazás segítségével természetes nyelven rögzíthetünk hangjegyzeteket telefonon keresztül, majd egy nagy nyelvi modell (`GPT-3.5-turbo`) segítségével cseveghetünk a hangjegyzetek tartalmáról.
-
-## Futtatási környezet, engedélyek
-
-Az applikáció Android alapú operációs rendszerekkel rendelkező mobileszközökön futtatható. Az SDK verziója legalább `26`-os, valamint az eszköznek rendelkeznie kell hangrögzítésre mikrofonnal.
-
-Az applikáció felhasználójának rendelkeznie kell Google fiókkal, hiszen ez alapján azonosíthatóak a rögzített jegyzetek.
-
-Az applikációnak engedélyt kell adni az internet elérésére (`android.permission.INTERNET`), valamint az audiórögzítére (`android.permission.RECORD_AUDIO`).
-
-## Limitációk
-
-Az alkalmazás emulátoron futtatva nem tud audiót rögzíteni az `android.speech`, illetve az emulátor mikrofonbeállításai miatt. A funkcionalitás letesztelhető, a gombra kattintva megjelenik a Speech to Text ablak, azonban a hangbemenet hiánya miatt nem tudja szöveggé konvertálni a beszédet.
-
-Az alkalmazás funkcionalitását emulátoron keresztül úgy tesztelhetjük, hogy a `HomeActivity.kt`-ban lecseréljük a `mockText` változó értékét az általunk menteni kívánt szövegre.
-
-```Kotlin
+```kotlin
 // HomeActivity.kt
 
 private var speechResultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -67,42 +49,42 @@ private var speechResultLauncher = registerForActivityResult(ActivityResultContr
         Log.d("MainActivity", recognizedText)
     } else {
         Log.d("MainActivity", "Google Speech recognizer could not pick up speech, inserting mock context.")
-        val mockText = """Elmenteni kívánt szöveg""".trimIndent()
+        val mockText = "Sample text to save"
 
         saveTranscription(mockText)
     }
 }
 ```
 
-## Használati útmutató
+## User Guide
 
-### Bejelentkezés
+### Login
 
-Az applikációt megnyitva elsőként be kell jelentkeznünk az alkalmásba egy Google felhasználói fiók segítségével. A `login with google` gomb megnyomása után bejelentkezhetünk az Email-címünk és jelszavunk megadásával.
+Upon launching Echo, users are prompted to log in using their Google account credentials. Clicking the `login with google` button directs users to the authentication page.
 
-![Bejelentkező nézet](assets/1-login.png)
+![Login View](assets/1-login.png)
 
-### Áttekintő nézet
+### Overview Screen
 
-A sikeres bejelentkezést követően egy áttekintő oldalra kerülünk. Itt látható a legutoljára rögzített hangjegyzet átirata, valamint az eddig rögzített szavak száma.
+Following successful login, users are presented with an overview screen displaying the transcription of the most recent voice memo and the total count of recorded words.
 
-![Áttekintő nézet](assets/2-overview.png)
+![Overview Screen](assets/2-overview.png)
 
-Az `Ask questions` gombot megnyomva az alkalmazás átirányít minket a chat-felületre.
+The `Ask questions` button navigates users to the query interface.
 
-### Jegyzetrögzítés
+### Recording Notes
 
-Az alul található `Start Recording` gombot megnyomva megjelenik a Google Speech to Text modulja, amellyel angol nyelvű hangjegyzeteket rögzíthetünk, amit az alkalmazás automatikusan szöveggé konvertál.
+Users can start a new recording by clicking the `Start Recording` button, activating Google's Speech to Text module for English voice note recording. Echo then automatically converts the audio to text.
 
-![Hangfelvétel](assets/3-recording.png)
+![Recording Interface](assets/3-recording.png)
 
-### Chat felület
+### Query Interface
 
-Az `Ask questions` gombra kattintva megjelenik előttünk a chat felület, ahol begépelhetjük az elküldeni kívánt üzenetet, a nyelvi modell pedig válaszol rá, figyelembe véve az eddig feltöltött hangjegyzeteket.
+Clicking `Ask questions` opens the chat interface, where users can type messages and receive responses based on the stored voice note content.
 
-![Chat felület](assets/4-chat.png)
+![Query Interface](assets/4-chat.png)
 
-### Kijelentkezés
+### Logout
 
-Az applikációból a fenti kilépés ikont megnyomva tudunk kijelentkezni. Ekkor az alkalmazás átirányít minket a korábban tárgyalt kezdőlapra, ahol Google segítségével ismét bejelentkezhetünk.
+Users can log out by clicking the exit icon, returning to the initial login screen for re-authentication.
 
